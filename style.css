@@ -1,0 +1,252 @@
+:root { 
+    --gold: #f1c40f; 
+    --red: #c0392b; 
+    --green: #27ae60; 
+    --pink: #ff69b4; 
+    --warm-yellow: #FFD700;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Sniglet', cursive; }
+
+body {
+    background: url('https://i.imgur.com/BU1Piu8.jpeg') no-repeat center center fixed;
+    background-size: cover; overflow: hidden; height: 100vh;
+}
+
+.screen {
+    position: absolute; width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    opacity: 0; visibility: hidden; transition: 0.8s ease-in-out;
+}
+.screen.active { opacity: 1; visibility: visible; }
+
+/* -------------------- Hộp quà ban đầu -------------------- */
+.box-wrapper { margin-top: 25vh; text-align: center; }
+.present-box { width: 250px; height: 250px; cursor: pointer; background: url('https://i.imgur.com/yCrbNeH.png') no-repeat center/contain; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.click-hint { color: white; font-weight: bold; margin-top: 20px; font-size: 1.2em; text-shadow: 2px 2px 5px black; }
+
+/* Tiêu đề & Cây thông */
+.main-header { text-align: center; margin-top: 20px; z-index: 100; }
+.title-gold { color: var(--gold); font-size: 3.5em; text-shadow: 2px 2px 10px black; }
+.subtitle-white { color: white; font-size: 1.3em; }
+
+/* Vị trí cây thông */
+.container-tree { 
+    flex: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    z-index: 50; 
+}
+.tree-relative { 
+    position: relative; 
+    height: 75vh; 
+    width: auto; 
+    max-width: 90%; 
+    /* Giảm margin-bottom âm để chân cây chìm sâu hơn vào lớp tuyết cao hơn */
+    margin-bottom: -50px; 
+}
+.base-tree { height: 100%; width: auto; display: block; }
+
+/* -------------------- Trang trí Cây (Ornaments) & LED -------------------- */
+.decoration {
+    position: absolute; cursor: pointer;
+    transform: translate(-50%, -50%); 
+    z-index: 60; 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.3s ease; 
+}
+.decoration:not(.read) { 
+    animation: led-glow 1s infinite alternate;
+}
+
+@keyframes led-glow { from { filter: brightness(1); } to { filter: brightness(1.7) drop-shadow(0 0 12px white); } }
+
+/* Hình dạng (Ornaments) */
+.ornament { width: 25px; height: 25px; border-radius: 50%; } 
+.ornament.red { background-color: var(--red); }
+.ornament.gold { background-color: var(--gold); }
+.ornament.green { background-color: var(--green); }
+.star { 
+    width: 35px; height: 35px; 
+    background: var(--gold); 
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
+    border-radius: 0; 
+}
+.ribbon { 
+    width: 35px; height: 35px; 
+    background-image: url('https://i.imgur.com/QHzoEqn.png');
+    border-radius: 0;
+}
+.bell { 
+    width: 30px; height: 35px; 
+    background-image: url('https://i.imgur.com/yJosAzL.png');
+    border-radius: 0;
+}
+.candy { 
+    width: 25px; height: 40px; 
+    background-image: url('https://i.imgur.com/tcEakZ8.png');
+    border-radius: 0;
+}
+
+/* HIỆU ỨNG KHI ĐÃ ĐỌC (Màu trắng, tắt glow) */
+.decoration.read { 
+    animation: none !important; 
+    filter: none !important;
+}
+.ornament.read { 
+    background-color: white !important; 
+    box-shadow: 0 0 8px rgba(0,0,0,0.3); 
+} 
+.star.read { 
+    background: white !important;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+.ribbon.read, .bell.read, .candy.read {
+    filter: grayscale(100%) brightness(150%);
+    opacity: 0.7; 
+}
+
+.star.top-star { width: 75px; height: 75px; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 100; color: #333; }
+
+/* -------------------- SNOWMAN -------------------- */
+#snowman {
+    position: absolute;
+    bottom: 5px; 
+    left: 0%; 
+    transform: translateX(-50%); 
+    width: 200px; 
+    height: 200px; 
+    background: url('https://i.imgur.com/pn9c9Fi.png') no-repeat center/contain;
+    z-index: 45; 
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+#tree-screen.active #snowman {
+    opacity: 1; 
+}
+
+/* -------------------- RABBIT BEAR MỚI -------------------- */
+#rabbit-bear {
+    position: absolute;
+    bottom: 5px; /* Nằm ngay trên lớp tuyết */
+    right: 0%; /* Căn theo cạnh phải của tree-relative */
+    transform: translateX(50%); /* Dịch sang phải 50% chiều rộng của chính nó */
+    width: 200px; /* Kích thước bằng Snowman */
+    height: 200px;
+    background: url('https://i.imgur.com/xh5rHli.png') no-repeat center/contain;
+    z-index: 45; 
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+#tree-screen.active #rabbit-bear {
+    opacity: 1; 
+}
+
+
+/* Nền tuyết trắng */
+#snow-base {
+    position: absolute; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 90vw; 
+    height: 100px; 
+    background: white;
+    border-radius: 50% 50% 0 0 / 50px 50px 0 0; 
+    z-index: 40; 
+    opacity: 0; 
+    transition: opacity 1s ease-in-out; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+#tree-screen.active #snow-base {
+    opacity: 1; 
+}
+
+/* -------------------- Khung trắng chính (Modal) -------------------- */
+.white-box {
+    display: none; position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+    background: white; border-radius: 15px; padding: 20px; z-index: 500;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5); text-align: center;
+    width: auto; max-width: 90%; min-width: 250px; transition: width 0.3s ease;
+}
+.white-box.wide { width: 450px; max-width: 90%; }
+.close-btn { position: absolute; right: 10px; top: 5px; font-size: 26px; cursor: pointer; color: #bbb; z-index: 10; }
+#media-area img { max-width: 100%; max-height: 45vh; border-radius: 10px; display: block; margin: 0 auto; object-fit: contain; }
+#media-area iframe { width: 320px; height: 180px; border-radius: 10px; }
+#sender-info { color: var(--green); margin-bottom: 5px; font-size: 1.2em; }
+#msg-content { color: #333; line-height: 1.4; font-size: 1.05em; white-space: pre-wrap; }
+.v-label { font-weight: bold; display: block; color: var(--red); margin-bottom: 5px; }
+
+
+/* -------------------- Ảnh Treo Hai Bên (Side Gallery) & Tuyết -------------------- */
+#snow-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+.snowflake { color: white; font-size: 1em; text-shadow: 0 0 5px rgba(255, 255, 255, 0.8); position: absolute; top: -10px; animation: fall linear infinite; opacity: 0.8; }
+@keyframes fall { to { transform: translateY(100vh); } }
+
+/* Vị trí Gallery */
+.side-gallery-container {
+    position: absolute; top: 15vh;
+    width: 20%; max-width: 200px;
+    height: 60vh; z-index: 55; 
+    display: flex; flex-direction: column; justify-content: space-around;
+}
+.side-gallery-container.left { left: 5%; align-items: flex-start; }
+.side-gallery-container.right { right: 5%; align-items: flex-end; }
+.photo-frame {
+    position: relative;
+    width: 130px; 
+    height: 100px;
+    padding: 5px;
+    background: white; 
+    border: 5px solid white; 
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    display: flex; justify-content: center; align-items: center;
+    margin: 10px 0;
+}
+.photo-frame::before {
+    content: '';
+    position: absolute;
+    top: -10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px; 
+    height: 15px; 
+    background: silver; 
+    border-radius: 3px;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.photo-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+}
+#light-string-wire {
+    position: absolute;
+    top: 5vh; left: 10%; right: 10%; 
+    height: 8vh; 
+    border-top: 1px solid #777;
+    border-radius: 0 0 50% 50% / 0 0 100px 100px;
+    z-index: 4;
+    pointer-events: none;
+}
+.string-light-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--warm-yellow);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 5px 2px rgba(255, 215, 0, 0.8);
+    z-index: 5;
+    animation: light-flicker 1.5s infinite alternate;
+    pointer-events: none;
+}
+@keyframes light-flicker {
+    0% { opacity: 0.9; }
+    100% { opacity: 1; box-shadow: 0 0 6px 3px rgba(255, 215, 0, 0.9); }
+}

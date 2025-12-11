@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>draft 17</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Christmas Tree - 9779s VNFC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sniglet&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="snow-layer"></div>
+    <div id="light-string-wire"></div>
+
+    <audio id="bg-music" loop>
+        <source src="Sabrina Carpenter - santa doesn’t know you like i do (Lyric Video) (1).mp3" type="audio/mp3">
+    </audio>
+
+    <div id="present-screen" class="screen active">
+        <div class="box-wrapper">
+            <div class="present-box" onclick="revealTree()"></div>
+            <p class="click-hint">click this to open the gift</p>
+        </div>
+    </div>
+
+    <div id="tree-screen" class="screen">
+        
+        <div id="side-gallery-left" class="side-gallery-container left"></div>
+        <div id="side-gallery-right" class="side-gallery-container right"></div>
+        
+        <header class="main-header">
+            <h1 class="title-gold">Magic Christmas Tree</h1>
+            <p class="subtitle-white">From 9779s VNFC to KJJK</p>
+        </header>
+        
+        <div class="container-tree">
+            <div class="tree-relative">
+                <img src="https://i.imgur.com/fgaE1oD.png" class="base-tree">
+                
+                <div id="decor-layer"></div>
+                
+                <div id="snowman"></div>
+                
+                <div id="rabbit-bear"></div>
+                
+                <div id="snow-base"></div> 
+                
+                <div id="info-frame" class="white-box">
+                    <span class="close-btn" onclick="closeFrame()">&times;</span>
+                    <div id="box-content">
+                        <h3 id="sender-info"></h3>
+                        <div id="media-area"></div>
+                        <p id="msg-content"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
